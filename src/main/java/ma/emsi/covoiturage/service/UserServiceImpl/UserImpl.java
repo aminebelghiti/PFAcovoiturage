@@ -7,7 +7,6 @@ import ma.emsi.covoiturage.model.User;
 import ma.emsi.covoiturage.repository.RoleRepository;
 import ma.emsi.covoiturage.repository.UserRepository;
 import ma.emsi.covoiturage.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
