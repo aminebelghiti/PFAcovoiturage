@@ -1,2 +1,5 @@
-package ma.emsi.covoiturage.controller;public class PassagerController {
+package ma.emsi.covoiturage.controller;
+
+public class PassagerController {
+
 }
