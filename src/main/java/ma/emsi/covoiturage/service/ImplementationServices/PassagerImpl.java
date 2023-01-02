@@ -1,4 +1,4 @@
-package ma.emsi.covoiturage.service.UserServiceImpl;
+package ma.emsi.covoiturage.service.ImplementationServices;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

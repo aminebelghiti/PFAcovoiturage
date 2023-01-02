@@ -40,6 +40,8 @@ public class Conducteur implements Serializable, UserDetails {
     private Boolean enabled= false;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @OneToOne
+    private Trajet trajet;
 
     public Conducteur(String nom, String prenom, String username, String email, String password, int telephone, String CIN, String sexe, String rating, String n_permis, Integer nbr_Trajets, Boolean locked, Boolean enabled, Role role) {
         this.nom = nom;
@@ -69,8 +71,6 @@ public class Conducteur implements Serializable, UserDetails {
         this.sexe=sexe;
         this.role=conducteur;
     }
-
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.name());

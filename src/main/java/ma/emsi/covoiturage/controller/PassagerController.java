@@ -2,6 +2,9 @@ package ma.emsi.covoiturage.controller;
 
 import lombok.RequiredArgsConstructor;
 import ma.emsi.covoiturage.model.Passager;
+import ma.emsi.covoiturage.security.Registration.RegistrationPassagerRequest;
+import ma.emsi.covoiturage.security.Registration.RegistrationRequest;
+import ma.emsi.covoiturage.security.Registration.RegistrationService;
 import ma.emsi.covoiturage.service.PassagerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,5 +42,15 @@ public class PassagerController {
     {
         passagerService.deletePassagee(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+    private final RegistrationService service;
+    @PostMapping("/register")
+    public  String register(@RequestBody RegistrationPassagerRequest request)
+    {
+        return service.registerPassager(request);
+    }
+    @GetMapping(path = "/confirm")
+    public String confirm(@RequestParam("token") String token) {
+        return service.confirmTokenP(token);
     }
 }

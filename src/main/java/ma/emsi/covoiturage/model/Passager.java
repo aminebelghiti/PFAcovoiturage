@@ -1,16 +1,18 @@
 package ma.emsi.covoiturage.model;
 
 import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
 
 @Entity
 @Data
-public class Passager implements Serializable {
+public class Passager implements Serializable, UserDetails {
     @Id
     @GeneratedValue
     private Long ID;
@@ -28,9 +30,12 @@ public class Passager implements Serializable {
     private String sexe;
     private String rating;
     private String role;
+    private Boolean locked =false;
+    private Boolean enabled= false;
 
-    public Passager(Long ID, String nom, String prenom, String username, String email, String password, int telephone, String CIN, String sexe, String rating, String role) {
-        this.ID = ID;
+    @ManyToMany(mappedBy = "passagers")
+    private Collection<Trajet> trajets;
+    public Passager(String nom, String prenom, String username, String email, String password, int telephone, String CIN, String sexe) {
         this.nom = nom;
         this.prenom = prenom;
         this.username = username;
@@ -39,12 +44,45 @@ public class Passager implements Serializable {
         this.telephone = telephone;
         this.CIN = CIN;
         this.sexe = sexe;
-        this.rating = rating;
-        this.role = "PASSAGER";
     }
     public Passager()
     {
         this.role="Passager";
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("passager");
+        return Collections.singletonList(authority);
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return !locked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+    @Override
+    public String getPassword(){
+        return password;
+    }
+    @Override
+    public String getUsername()
+    {
+        return email;
     }
 }
 

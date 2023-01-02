@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface PassagerService {
     Passager savePassager (Passager passager);
-    Passager getPassager(String username);
+    Passager getPassager(String email);
     List<Passager> getAllPassager();
     Passager updatePassager (Passager passager);
     void deletePassagee(Long id);

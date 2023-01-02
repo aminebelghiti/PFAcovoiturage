@@ -1,9 +1,8 @@
-package ma.emsi.covoiturage.security.Registration.token;
+package ma.emsi.covoiturage.security.Registration.tokenPassager;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ma.emsi.covoiturage.model.Conducteur;
 import ma.emsi.covoiturage.model.Passager;
 
 import javax.persistence.*;
@@ -14,10 +13,10 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 
-public class ConfirmationToken {
+public class ConfirmationTokenPassager {
 
-@Id
-@GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long ID;
     @Column(nullable = false)
     private String token;
@@ -30,17 +29,19 @@ public class ConfirmationToken {
 
     private LocalDateTime confirmedAt;
     @ManyToOne
-    @JoinColumn(name = "conducteur_id", nullable = false)
-    private Conducteur conducteur;
+    @JoinColumn(name = "passager_id", nullable = false)
+    private Passager passager;
 
-    public ConfirmationToken(String token,
+
+
+    public ConfirmationTokenPassager(String token,
                              LocalDateTime createdAt,
                              LocalDateTime expiredAt,
-                             Conducteur conducteur) {
+                             Passager passager) {
         this.token = token;
         this.createdAt = createdAt;
         this.expiredAt = expiredAt;
-        this.conducteur= conducteur;
+        this.passager= passager;
     }
 
 }

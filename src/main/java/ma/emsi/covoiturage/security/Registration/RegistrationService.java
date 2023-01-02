@@ -3,10 +3,14 @@ package ma.emsi.covoiturage.security.Registration;
 import lombok.AllArgsConstructor;
 import ma.emsi.covoiturage.mail.EmailSender;
 import ma.emsi.covoiturage.model.Conducteur;
+import ma.emsi.covoiturage.model.Passager;
 import ma.emsi.covoiturage.model.Role;
 import ma.emsi.covoiturage.security.Registration.token.ConfirmationToken;
 import ma.emsi.covoiturage.security.Registration.token.ConfirmationTokenService;
+import ma.emsi.covoiturage.security.Registration.tokenPassager.ConfirmationTokenPassager;
+import ma.emsi.covoiturage.security.Registration.tokenPassager.ConfirmationTokenServicePassager;
 import ma.emsi.covoiturage.service.ConducteurAppService;
+import ma.emsi.covoiturage.service.PassagerAppService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,8 +21,11 @@ import java.time.LocalDateTime;
 public class RegistrationService {
     private final EmailValidation emailValidation;
     private final ConducteurAppService conducteurAppService;
+
+    private PassagerAppService passagerAppService;
     private final EmailSender sender;
     private final ConfirmationTokenService service;
+    private final ConfirmationTokenServicePassager servicePassager;
     public String register(RegistrationRequest request) {
         boolean isValidEmail =emailValidation.test(request.getEmail());
         if (!isValidEmail){
@@ -65,6 +72,53 @@ public class RegistrationService {
                 confirmationToken.getConducteur().getEmail());
         return "confirmed";
     }
+
+    public String registerPassager(RegistrationPassagerRequest request) {
+        boolean isValidEmail =emailValidation.test(request.getEmail());
+        if (!isValidEmail){
+            throw new IllegalStateException("email non valide");
+        }
+        String token = passagerAppService.signUpPassager(
+                new Passager(
+                        request.getNom(),
+                        request.getPrenom(),
+                        request.getUsername(),
+                        request.getEmail(),
+                        request.getPassword(),
+                        request.getTelephone(),
+                        request.getCIN(),
+                        request.getSexe()
+                )
+        );
+        String link = "http://localhost:8080/passager/confirm?token=" + token;
+        sender.send(
+                request.getEmail(),
+                buildEmail(request.getUsername(), link));
+        return token;
+    }
+    @Transactional
+    public String confirmTokenP(String token) {
+        ConfirmationTokenPassager confirmationTokenPassager = servicePassager
+                .getToken(token)
+                .orElseThrow(() ->
+                        new IllegalStateException("token not found"));
+
+        if (confirmationTokenPassager.getConfirmedAt() != null) {
+            throw new IllegalStateException("email already confirmed");
+        }
+
+        LocalDateTime expiredAt = confirmationTokenPassager.getExpiredAt();
+
+        if (expiredAt.isBefore(LocalDateTime.now())) {
+            throw new IllegalStateException("token expired");
+        }
+
+        servicePassager.setConfirmedAt(token);
+        passagerAppService.enableAppUser(
+                confirmationTokenPassager.getPassager().getEmail());
+        return "confirmed";
+    }
+
 
     private String buildEmail(String name, String link) {
         return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +

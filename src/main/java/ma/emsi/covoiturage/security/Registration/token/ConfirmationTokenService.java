@@ -1,6 +1,7 @@
 package ma.emsi.covoiturage.security.Registration.token;
 
 import lombok.AllArgsConstructor;
+import ma.emsi.covoiturage.security.Registration.tokenPassager.ConfirmationTokenPassager;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
