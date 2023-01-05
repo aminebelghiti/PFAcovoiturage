@@ -35,42 +35,27 @@ public class Conducteur implements Serializable, UserDetails {
     private String sexe;
     private String rating;
     private String n_permis;
-    private Integer nbr_Trajets;
+    private int nbr_Trajets;
     private Boolean locked =false;
     private Boolean enabled= false;
     @Enumerated(EnumType.STRING)
     private Role role;
     @OneToOne
     private Trajet trajet;
-
-    public Conducteur(String nom, String prenom, String username, String email, String password, int telephone, String CIN, String sexe, String rating, String n_permis, Integer nbr_Trajets, Boolean locked, Boolean enabled, Role role) {
+    public Conducteur(String nom, String prenom, String username, String email, String password, int telephone, String cin, String sexe, String n_permis, int nbr_trajets, Role conducteur) {
         this.nom = nom;
         this.prenom = prenom;
         this.username = username;
         this.email = email;
         this.password = password;
         this.telephone = telephone;
-        this.CIN = CIN;
+        this.CIN = cin;
         this.sexe = sexe;
-        this.rating = rating;
         this.n_permis = n_permis;
-        this.nbr_Trajets = nbr_Trajets;
-        this.locked = locked;
-        this.enabled = enabled;
-        this.role = role;
+        this.nbr_Trajets = nbr_trajets;
+        this.role = conducteur;
     }
 
-    public Conducteur(String nom, String prenom, String username, String email, String password, int telephone, String cin, String sexe, Role conducteur) {
-        this.nom=nom;
-        this.prenom=prenom;
-        this.username=username;
-        this.email=email;
-        this.password=password;
-        this.telephone=telephone;
-        this.CIN=cin;
-        this.sexe=sexe;
-        this.role=conducteur;
-    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.name());
@@ -87,7 +72,7 @@ public class Conducteur implements Serializable, UserDetails {
     }
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override

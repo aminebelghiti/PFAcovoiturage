@@ -1,6 +1,7 @@
 package ma.emsi.covoiturage.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +13,7 @@ import java.util.Collections;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class Passager implements Serializable, UserDetails {
     @Id
     @GeneratedValue
@@ -44,21 +46,25 @@ public class Passager implements Serializable, UserDetails {
         this.telephone = telephone;
         this.CIN = CIN;
         this.sexe = sexe;
-    }
-    public Passager()
-    {
         this.role="Passager";
     }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority("passager");
         return Collections.singletonList(authority);
     }
-
+    @Override
+    public String getPassword(){
+        return password;
+    }
+    @Override
+    public String getUsername()
+    {
+        return email;
+    }
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
@@ -74,15 +80,6 @@ public class Passager implements Serializable, UserDetails {
     @Override
     public boolean isEnabled() {
         return enabled;
-    }
-    @Override
-    public String getPassword(){
-        return password;
-    }
-    @Override
-    public String getUsername()
-    {
-        return email;
     }
 }
 

@@ -13,11 +13,10 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public interface ConducteurRepository extends JpaRepository<Conducteur,Long> {
     Optional<Conducteur> findByEmail (String email);
-
     @Transactional
     @Modifying
     @Query("UPDATE Conducteur a " +
             "SET a.enabled = TRUE WHERE a.email = ?1")
-    int enableAppUser(String email);
+    int enableConducteur(String email);
 
 }

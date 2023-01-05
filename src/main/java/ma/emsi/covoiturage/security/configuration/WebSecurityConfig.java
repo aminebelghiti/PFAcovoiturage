@@ -2,7 +2,7 @@ package ma.emsi.covoiturage.security.configuration;
 
 import lombok.AllArgsConstructor;
 import ma.emsi.covoiturage.security.PasswordEncoder;
-import ma.emsi.covoiturage.service.ConducteurAppService;
+import ma.emsi.covoiturage.service.RegistrationAppService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -15,7 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @AllArgsConstructor
 @EnableWebSecurity
 public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
-    private final ConducteurAppService service;
+    private final RegistrationAppService service;
     private final PasswordEncoder passwordEncoder;
     @Override
     protected void configure(HttpSecurity http) throws Exception {

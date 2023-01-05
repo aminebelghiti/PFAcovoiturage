@@ -9,8 +9,7 @@ import ma.emsi.covoiturage.security.Registration.token.ConfirmationToken;
 import ma.emsi.covoiturage.security.Registration.token.ConfirmationTokenService;
 import ma.emsi.covoiturage.security.Registration.tokenPassager.ConfirmationTokenPassager;
 import ma.emsi.covoiturage.security.Registration.tokenPassager.ConfirmationTokenServicePassager;
-import ma.emsi.covoiturage.service.ConducteurAppService;
-import ma.emsi.covoiturage.service.PassagerAppService;
+import ma.emsi.covoiturage.service.RegistrationAppService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,9 +19,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class RegistrationService {
     private final EmailValidation emailValidation;
-    private final ConducteurAppService conducteurAppService;
+    private final RegistrationAppService registrationAppService;
 
-    private PassagerAppService passagerAppService;
     private final EmailSender sender;
     private final ConfirmationTokenService service;
     private final ConfirmationTokenServicePassager servicePassager;
@@ -31,7 +29,7 @@ public class RegistrationService {
         if (!isValidEmail){
             throw new IllegalStateException("email non valide");
         }
-        String token = conducteurAppService.signUpConducteur(
+        String token = registrationAppService.signUpConducteur(
                 new Conducteur(
                         request.getNom(),
                         request.getPrenom(),
@@ -41,6 +39,8 @@ public class RegistrationService {
                         request.getTelephone(),
                         request.getCIN(),
                         request.getSexe(),
+                        request.getN_permis(),
+                        request.getNbr_Trajets(),
                         Role.CONDUCTEUR
                 )
         );
@@ -68,7 +68,7 @@ public class RegistrationService {
         }
 
         service.setConfirmedAt(token);
-        conducteurAppService.enableAppUser(
+        registrationAppService.enableConducteur(
                 confirmationToken.getConducteur().getEmail());
         return "confirmed";
     }
@@ -78,7 +78,7 @@ public class RegistrationService {
         if (!isValidEmail){
             throw new IllegalStateException("email non valide");
         }
-        String token = passagerAppService.signUpPassager(
+        String token = registrationAppService.signUpPassager(
                 new Passager(
                         request.getNom(),
                         request.getPrenom(),
@@ -114,10 +114,11 @@ public class RegistrationService {
         }
 
         servicePassager.setConfirmedAt(token);
-        passagerAppService.enableAppUser(
+        registrationAppService.enablePassager(
                 confirmationTokenPassager.getPassager().getEmail());
         return "confirmed";
     }
+
 
 
     private String buildEmail(String name, String link) {

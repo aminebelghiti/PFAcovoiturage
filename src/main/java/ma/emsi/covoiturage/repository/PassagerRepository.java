@@ -11,11 +11,11 @@ import java.util.Optional;
 
 public interface PassagerRepository extends JpaRepository<Passager,Long> {
     Passager findPassagerByUsername(String username);
-    Optional<Conducteur> findByEmail (String email);
+    Optional<Passager> findByEmail (String email);
 
     @Transactional
     @Modifying
-    @Query("UPDATE Conducteur a " +
+    @Query("UPDATE Passager a " +
             "SET a.enabled = TRUE WHERE a.email = ?1")
     int enableAppUser(String email);
 }
