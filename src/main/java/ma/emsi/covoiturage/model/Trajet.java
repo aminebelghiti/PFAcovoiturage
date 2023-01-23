@@ -28,15 +28,16 @@ public class Trajet implements Serializable {
     private double prix;
     private double duree;
     @ManyToOne
-    private Voiture voiture_id;
+    private Voiture voiture;
+
+    @OneToOne
+    private Conducteur conducteur;
+
+
     @ManyToMany
     @JoinTable(
             name = "Reservation",
             joinColumns = @JoinColumn(name = "passager_id"),
             inverseJoinColumns = @JoinColumn(name = "trajet_id"))
-    Collection<Passager> passagers;
-    @OneToOne
-    private Conducteur conducteur;
-
-
+    Collection<Passager>passagers;
 }

@@ -13,10 +13,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/passager")
+
 public class PassagerController {
     private final PassagerService passagerService;
 
@@ -49,7 +50,7 @@ public class PassagerController {
     {
         return service.registerPassager(request);
     }
-    @GetMapping(path = "/confirm")
+    @GetMapping(path = "/confirm") 
     public String confirm(@RequestParam("token") String token) {
         return service.confirmTokenP(token);
     }

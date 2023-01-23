@@ -22,7 +22,7 @@ public class Voiture {
     private int nb_places;
     private String carte_grise;
     private int capacite;
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "trajet_id", nullable = false)
-    private Collection<Trajet> trajets;
+
+
+
 }

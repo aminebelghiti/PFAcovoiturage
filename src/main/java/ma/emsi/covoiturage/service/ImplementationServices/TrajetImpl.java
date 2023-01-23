@@ -4,12 +4,14 @@ import lombok.AllArgsConstructor;
 import ma.emsi.covoiturage.model.Trajet;
 import ma.emsi.covoiturage.repository.TrajetRepository;
 import ma.emsi.covoiturage.service.TrajetService;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 @AllArgsConstructor
 public class TrajetImpl implements TrajetService {
 
@@ -37,6 +39,11 @@ public class TrajetImpl implements TrajetService {
     @Override
     public void deleteTrajet(Long id) {
         repository.deleteById(id);
+    }
+
+    @Override
+    public List<Trajet> searchTrajets(String ville_Depart, String ville_Arrivee, LocalDate date_Trajet) {
+        return repository.searchTrajetDateDeppartArrive(ville_Depart,ville_Arrivee,date_Trajet);
     }
 
 }
